@@ -37,8 +37,8 @@ func main() {
 
 	fs := http.FileServer(http.Dir(dir))
 
-	// Wrap the file server with the reload script injection middleware
-	http.Handle("/", injectReloadScript(fs, file))
+	// Pass both the file server, filename, and directory to the middleware
+	http.Handle("/", injectReloadScript(fs, file, dir))
 
 	// Websocket endpoint
 	http.Handle("/ws", websocket.Handler(wsHandler))
@@ -140,7 +140,7 @@ func watchFiles(dir string) {
 //	fs := http.FileServer(http.Dir("/var/www"))
 //	handler := injectReloadScript(fs, "index.html")
 //	http.Handle("/", handler)
-func injectReloadScript(next http.Handler, entry string) http.Handler {
+func injectReloadScript(next http.Handler, entry, dir string) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Check if we should inject the script
 		// Inject for root path "/" or when URL matches the entry file
@@ -152,16 +152,16 @@ func injectReloadScript(next http.Handler, entry string) http.Handler {
 			var data []byte
 			var err error
 
-			// For root path, read the entry file directly
+			// For root path, read the entry file from the specified directory
 			if r.URL.Path == "/" {
-				data, err = os.ReadFile(entry)
+				data, err = os.ReadFile(filepath.Join(dir, entry))
 			} else {
-				// For other paths, construct the file path
+				// For other paths, construct the file path within the directory
 				filePath := strings.TrimPrefix(r.URL.Path, "/")
 				if filePath == "" {
 					filePath = entry
 				}
-				data, err = os.ReadFile(filePath)
+				data, err = os.ReadFile(filepath.Join(dir, filePath))
 			}
 
 			if err != nil {
