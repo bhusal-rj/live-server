@@ -92,9 +92,7 @@ go run main.go index.html
 2. Create a new branch
 3. Submit a PR with your feature or fix!
 
-## 📄 License
 
-MIT © Your Name
 
 ## ❤️ Inspired By
 
