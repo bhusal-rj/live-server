@@ -5,7 +5,10 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
+
+	"flag"
 
 	"github.com/fsnotify/fsnotify"
 	"golang.org/x/net/websocket"
@@ -15,13 +18,22 @@ var clients = make(map[*websocket.Conn]bool)
 
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Println("Usage: live-server <file.html>")
+		fmt.Println("Usage: live-server [--port PORT] <file.html>")
+		fmt.Println("  --port  Port to run the server on (default: 8080)")
 		return
 	}
 
-	// Get the actual file entry with the help of the os args
-	entry := os.Args[1]
+	// Define the command line flags
+	var port int
 
+	flag.IntVar(&port, "port", 8080, "Port to run the server on (default: 8080)")
+	flag.Parse()
+
+	// Get the essential flag
+	// Get the actual file entry with the help of the os args
+	new_entry := flag.Args()
+
+	entry := new_entry[0]
 	// Get the absolute path of the file entry
 	absPath, err := filepath.Abs(entry)
 	if err != nil {
@@ -46,8 +58,8 @@ func main() {
 	// Watch for the file changes in the directory
 	go watchFiles(dir)
 
-	fmt.Println("Serving", entry, "at http://localhost:8080/"+file)
-	http.ListenAndServe(":8080", nil)
+	fmt.Println("Serving files at", " http://localhost:"+strconv.Itoa(port)+"/"+file)
+	http.ListenAndServe(":"+strconv.Itoa(port), nil)
 }
 
 func wsHandler(ws *websocket.Conn) {

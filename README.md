@@ -101,7 +101,7 @@ go run main.go index.html
 
 ## 🧠 TODO (for contributors or future features)
 
-- [ ] Add CLI flags for `--port`, `--no-browser`, `--open`
+- [ ] Add CLI flags for `--port`
 - [ ] SPA fallback support (index.html routing)
 - [ ] Live CSS/JS injection without reload
 - [ ] Add support for HTTPS
