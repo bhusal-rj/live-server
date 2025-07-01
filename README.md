@@ -23,10 +23,27 @@ Inspired by tools like [`live-server`](https://github.com/tapio/live-server) and
 ### Clone & Build
 
 ```bash
-git clone https://github.com/your-username/live-server-go.git
-cd live-server-go
+git clone https://github.com/bhusal-rj/live-server.git
+cd live-server
 go build -o live-server
 ```
+
+### Install Directly with Go
+
+You can also install globally using Go (Go 1.17+):
+
+```bash
+go install github.com/bhusal-rj/live-server@latest
+```
+
+This will place the `live-server` binary in your Go bin directory (usually `~/go/bin`).
+Make sure this directory is in your `PATH`:
+
+```bash
+export PATH=$PATH:$(go env GOPATH)/bin
+```
+
+---
 
 ## 🛠 Usage
 
