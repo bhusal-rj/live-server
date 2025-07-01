@@ -1,4 +1,4 @@
-module github.com/bhusal-rj/live-server-go
+module github.com/bhusal-rj/live-server
 
 go 1.24.4
 
